@@ -1,17 +1,26 @@
-/* Luis Garduno
-   ID #: 47780191
-   Lab 8 - Fall 2018
-*/
+/* 
+ * Ringer.java
+ * Baseball
+ *
+ * Created by Luis G.
+ * Updated on 01/27/2023
+ *
+ * */
+
 import java.util.Random;
 
 public class Ringer extends Player {
     public Ringer(String ringerString, Base ringerBase){
-        super(ringerString, ringerBase);           //super class
+
+        // Super class
+        super(ringerString, ringerBase);
     }
 
     public RollResult roll(){
         Random diceRoll = new Random();
-        int dice1 = diceRoll.nextInt(3) + 1; //decreases the face values to be 3 to increase the chance of getting hit
+
+        // Decreases the face values to be 3 to increase the chance of getting hit
+        int dice1 = diceRoll.nextInt(3) + 1;
         int dice2 = diceRoll.nextInt(3) + 1;
 
         int[] rolls = new int[2];
@@ -20,6 +29,7 @@ public class Ringer extends Player {
 
         String str = "  Rolled  " + rolls[0] + "  " + rolls[1];
 
-        return new RollResult(rolls, str);          //returns the array
+        // Returns the array
+        return new RollResult(rolls, str);
     }
 }

@@ -1,16 +1,25 @@
-/* Luis Garduno
-   ID #: 47780191
-   Lab 8 - Fall 2018
-*/
+/* 
+ * Field.java
+ * Baseball
+ *
+ * Created by Luis G.
+ * Updated on 01/27/2023
+ *
+ * */
+
 import java.util.ArrayList;
 
 public class Field{
 
-    ArrayList<Base> bases;                             //creates bases object arraylist
+    // Creates bases object array-list
+    ArrayList<Base> bases;
 
     public Field(){
-        bases = new ArrayList<Base>();                 //instance variable
-        bases.add(new Base("Dugout"));           //add 6  locations
+        // Instance variable
+        bases = new ArrayList<Base>();
+
+        // Add 6 locations
+        bases.add(new Base("Dugout"));
         bases.add(new Base("BatterBox"));
         bases.add(new Base("First"));
         bases.add(new Base("Second"));
@@ -19,16 +28,20 @@ public class Field{
     }
 
     public Base getDugout(){
-        return bases.get(0);                          //if Base getDugout is called, it will return dugout
+        // If Base getDugout is called, it will return dug-out
+        return bases.get(0);
     }
 
-    public Base getBatterBox(){                        //this gets the String BatterBox
+    // This gets the String BatterBox
+    public Base getBatterBox(){
         return bases.get(1);
     }
 
     public Base moveAhead(Base startingBase, int numberOfBases){
         int startingBaseIndexNumber = bases.indexOf(startingBase);
-        int newBaseIndexNumber = Math.min(startingBaseIndexNumber + numberOfBases ,5); //move ahead the number of bases, but don't exceed index location 5
+
+        // Move ahead the number of bases, but don't exceed index location 5
+        int newBaseIndexNumber = Math.min(startingBaseIndexNumber + numberOfBases ,5);
         Base newBase = bases.get(newBaseIndexNumber);
         return newBase;
     }

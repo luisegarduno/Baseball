@@ -1,123 +1,191 @@
-/* Luis Garduno
-   ID #: 47780191
-   Lab 8 - Fall 2018
-*/
+/* 
+ * BatterUpGUI.java
+ * Baseball
+ * 
+ * Created by Luis G.
+ * Updated on 01/27/2023
+ * 
+ * */
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class BatterUpGUI extends JFrame {
-    private BatterUp playBall = new BatterUp();
-    JTextArea output;
-    JScrollPane scrollPane;                //scroll bar
-    JButton playButton, resetButton;       //play and reset button
-    JLabel numOfInnings, teamName;         // labels for innings and team
-    JTextField inputInnings, inputTeam;    // text box for the jlabels
-    FlowLayout flow;                       //layout
+  private BatterUp playBall = new BatterUp();
+  JTextArea output;
 
-    public BatterUpGUI(){
-        super("BatterUp!"); //or super("tile"); to include a title in the JFrame's Top border
-        flow = new FlowLayout(); //creates new flowlayout
-        setLayout(flow);         //sets layout
+  // Scroll bar
+  JScrollPane scrollPane;
 
-        numOfInnings = new JLabel("Number of innings"); //create Jlabels
-        inputInnings = new JTextField(20); //defines the length of the Number of Innings textbox
-        add(numOfInnings);                         //adds it to the JFrame
-        add(inputInnings);
+  // Play and reset button
+  JButton playButton, resetButton;
 
-        teamName = new JLabel("Team Name");
-        inputTeam = new JTextField(20);
-        add(teamName);
-        add(inputTeam);
+  // Labels for innings and team
+  JLabel numOfInnings, teamName;
 
-        playButton = new JButton("Play");    // creates play button
-        resetButton = new JButton("Reset");  // creates reset button
-        add(playButton);                          //add the play button the frame
-        add(resetButton);                         //add the reset button to the frame
-            pressButton button = new pressButton(); //creates an instance of pressButton
-            playButton.addActionListener(button);
-            resetButton.addActionListener(button);
-            resetButton.setEnabled(false);          //the reset button is initially turned off
+  // Text box for the jlabels
+  JTextField inputInnings, inputTeam;
+
+  // Layout
+  FlowLayout flow;
+
+  public BatterUpGUI(){
+    // Or super("tile");to include a title in the JFrame's Top border
+    super("BatterUp!");
+
+    // Creates new flow-layout
+    flow = new FlowLayout();
+
+    // Sets layout
+    setLayout(flow);
+
+    // Create Jlabels
+    numOfInnings = new JLabel("Number of innings");
+
+    // Defines the length of the Number of Innings text-box
+    inputInnings = new JTextField(20);
+
+    // Adds it to the JFrame
+    add(numOfInnings);
+    add(inputInnings);
+
+    teamName = new JLabel("Team Name");
+    inputTeam = new JTextField(20);
+    add(teamName);
+    add(inputTeam);
+
+    // Creates play button
+    playButton = new JButton("Play");   
+
+    // Creates reset button
+    resetButton = new JButton("Reset"); 
+
+    // Add the play button the frame
+    add(playButton);
+
+    // Add the reset button to the frame
+    add(resetButton);
+
+    // Creates an instance of pressButton
+    pressButton button = new pressButton();
+    playButton.addActionListener(button);
+    resetButton.addActionListener(button);
+
+    // The reset button is initially turned off
+    resetButton.setEnabled(false);
 
 
-        output = new JTextArea(20, 50);
-        scrollPane = new JScrollPane(output);
-        add(scrollPane);
+    output = new JTextArea(20, 50);
+    scrollPane = new JScrollPane(output);
+    add(scrollPane);
 
-        output.setEditable(false); //Disable editing
+    // Disable editing
+    output.setEditable(false);
 
-        output.setText("");       // Erase contents and replace with test
-        output.append("");        //Append contents with additional text
+    // Erase contents and replace with test
+    output.setText("");
 
+    // Append contents with additional text
+    output.append("");
+
+  }
+
+  // Invoke whenever either the play or reset button is pressed
+  private class pressButton implements ActionListener { 
+
+    // This just makes sure that the innings text-box and team name text-box actually contains a string/integer
+    public boolean checker() {  
+      String innings = inputInnings.getText();
+      String team = inputTeam.getText();
+
+      // If the string length is longer than or equal to 1 return true
+      if (innings.length() >= 1 && team.length() >= 1) { 
+        return true;
+      } else {
+        return false;
+      }
     }
 
-    private class pressButton implements ActionListener { //invoke whenever either the play or reset button is pressed
-        public boolean checker() {  // this just makes sure that the innings textbox and team name textbox actually constains a string/int
-            String innings = inputInnings.getText();
-            String team = inputTeam.getText();
-            if (innings.length() >= 1 && team.length() >= 1) { //if the string length is longer than or equal to 1 return true
-                return true;
-            } else {
-                return false;
+    public void actionPerformed(ActionEvent e) {
+
+      // Checks to see if team name text box is filled in
+      if(inputTeam.getText().length() >= 1){ 
+        try{
+          int innings = Integer.parseInt(inputInnings.getText());
+          String teamString = "Team " + inputTeam.getText() + " is playing!";
+          if (e.getSource() == playButton && checker() == true) {
+            if (innings > 0) {
+
+              // If text-boxes are filled in the reset button is enabled
+              resetButton.setEnabled(true);
+              output.append(teamString + "\n");
+              output.append(playBall.play(innings));
             }
+
+            resetButton.setEnabled(true);
+
+            // When the reset button is enabled, the play button is not
+            playButton.setEnabled(false);   
+
+            // When the play button is pressed, you cannot edit the innings or
+            inputInnings.setEditable(false);
+
+            // The team name until the user presses reset
+            inputTeam.setEditable(false);   
+          }
+
+          // This is self-explanatory
+          if (e.getSource() == resetButton ) { 
+            inputInnings.setText("");
+            inputTeam.setText("");
+            output.setText("");
+            resetButton.setEnabled(false);
+            playButton.setEnabled(true);
+            inputInnings.setEditable(true);
+            inputTeam.setEditable(true);
+          }
+          // If a team is typed in but the Innings box is left empty it will open this message
+        } catch(Exception error){ 
+          if(inputInnings.getText().length() < 1){
+            JOptionPane.showMessageDialog(
+
+                // Specifies where on the screen to place the dialog
+                null, 
+
+                // Message to display
+                "Please enter the number of innings", 
+                // Title bar message
+                "Missing Data", 
+                // 0 refers to the JOptionPane.ERROR_MESSAGE icon
+                0 
+                );
+          }
+        }
+      }
+      // Else, the text-box for team name is not filled in
+      else{ 
+        // If innings text box is empty this message will pop-up
+        if(inputInnings.getText().length() < 1){ 
+          JOptionPane.showMessageDialog(
+              null,
+              "Please enter the number of innings",
+              "Missing Data",
+              0
+              );
         }
 
-        public void actionPerformed(ActionEvent e) {
-            if(inputTeam.getText().length() >= 1){ //checks to see if team name text box is filled in
-                try{
-                    int innings = Integer.parseInt(inputInnings.getText());
-                    String teamString = "Team " + inputTeam.getText() + " is playing!";
-                    if (e.getSource() == playButton && checker() == true) {
-                        if (innings > 0) {
-                            resetButton.setEnabled(true); //if textboxes are filled in the reset button is enabled
-                            output.append(teamString + "\n");
-                            output.append(playBall.play(innings));
-                        }
-
-                        resetButton.setEnabled(true);
-                        playButton.setEnabled(false);    //when the reset button is enabled, the play button is not
-                        inputInnings.setEditable(false); //when the play button is pressed, you cannot edit the innings or
-                        inputTeam.setEditable(false);    // the team name until the user presses reset
-                    }
-                    if (e.getSource() == resetButton ) { //this is self-explanatory
-                        inputInnings.setText("");
-                        inputTeam.setText("");
-                        output.setText("");
-                        resetButton.setEnabled(false);
-                        playButton.setEnabled(true);
-                        inputInnings.setEditable(true);
-                        inputTeam.setEditable(true);
-                    }
-                } catch(Exception error){ // if a team is typed in but the Innings box is left empty it will open this message
-                    if(inputInnings.getText().length() < 1){
-                        JOptionPane.showMessageDialog(
-                                null, //specifies where on the screen to place the dialog
-                                "Please enter the number of innings", //message to display
-                                "Missing Data", //title bar message
-                                0 //0 refers to the JOptionPane.ERROR_MESSAGE icon
-                        );
-                    }
-                }
-            }
-                else{ //if the textbox for team name is not filled in
-                    if(inputInnings.getText().length() < 1){ //if innings text box is empty this message will popup
-                        JOptionPane.showMessageDialog(
-                        null,
-                        "Please enter the number of innings",
-                        "Missing Data",
-                        0
-                        );
-                    }
-                    if(inputTeam.getText().length() < 1){ //if team name is missing this message will appear
-                        JOptionPane.showMessageDialog(
-                            null,
-                            "Please enter a team name",
-                            "Missing Data",
-                            0
-                        );
-                    }
-                }
-            }
+        // If team name is missing this message will appear
+        if(inputTeam.getText().length() < 1){ 
+          JOptionPane.showMessageDialog(
+            null,
+            "Please enter a team name",
+            "Missing Data",
+            0
+          );
+        }
+      }
     }
+  }
 }

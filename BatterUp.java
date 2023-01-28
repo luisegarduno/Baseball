@@ -1,183 +1,254 @@
-/* Luis Garduno
-   ID #: 47780191
-   Lab 8 - Fall 2018
-*/
+/* 
+ * BatterUp.java
+ * Baseball
+ * 
+ * Created by Luis G.
+ * Updated on 01/27/2023
+ * 
+ * */
+
 import java.util.ArrayList;
 import java.io.File;
 import java.util.Scanner;
 import java.io.PrintWriter;
 
-public class BatterUp{
-    private int outs;
-    private int score;
-    private int nextPlayerIndex;
-    private Field theField;
-    private ArrayList<Player> players = new ArrayList<Player>();
+public class BatterUp {
+  private int outs;
+  private int score;
+  private int nextPlayerIndex;
+  private Field theField;
+  private ArrayList<Player> players = new ArrayList<Player>();
 
-    public BatterUp() {
-        outs = 0;
-        score = 0;
-        nextPlayerIndex = 0;
-        theField = new Field();
-        createPlayers();
-    }
+  public BatterUp() {
+    outs = 0;
+    score = 0;
+    nextPlayerIndex = 0;
+    theField = new Field();
+    createPlayers();
+  }
 
-    public void createPlayers() {
+  public void createPlayers() {
 
-        try {
-            File text = new File("players.txt"); //declares players.txt as a file
-            Scanner scan = new Scanner(text);             //scans the file
+    try {
+      // Declares players.txt as a file
+      File text = new File("players.txt");
 
-            while(scan.hasNext()){
-                scan.useDelimiter(",|\r\n");             //splits the document once "," is ofund
+      // Scans the file
+      Scanner scan = new Scanner(text);
 
-                String name = scan.next();               // first thing found is the name
-                String type = scan.next();               //after the comma, the type is found
+      while(scan.hasNext()){
+        // splits the document once "," is found
+        scan.useDelimiter(",|\r\n");
 
-                Base dugout = theField.getDugout();      //creates player and initializes it to dugout
-                if(type.equalsIgnoreCase(("Dud"))){
-                    players.add(new Dud(name, dugout));
-                }
-                if(type.equalsIgnoreCase(("Ringer"))){
-                    players.add(new Ringer(name, dugout));
-                }
-                if(type.equalsIgnoreCase(("Average"))){
-                    players.add(new Player(name, dugout));
-                }
+        // First thing found is the name
+        String name = scan.next();
+        // After the comma, the type is found
+        String type = scan.next();
 
-            }
-            scan.close();                                //closes the file
-
-        } catch (Exception e) {
-            System.out.println("Problem reading input file");
+        // Creates player and initializes it to dug-out
+        Base dugout = theField.getDugout();
+        if(type.equalsIgnoreCase(("Dud"))){
+          players.add(new Dud(name, dugout));
+        }
+        if(type.equalsIgnoreCase(("Ringer"))){
+          players.add(new Ringer(name, dugout));
+        }
+        if(type.equalsIgnoreCase(("Average"))){
+          players.add(new Player(name, dugout));
         }
 
-        Base dugout = theField.getDugout(); //get Dugout will enter the Field arraylist and return the "dugout" string and Base dugout will be equal to that string
-//        players.add(new Player("Alex"    , dugout));  //Player 1
-//        players.add(new Player("Betty"   , dugout));  // remember, players need to have a name and a location
-//        players.add(new Player("Carlos"  , dugout));  //3
-//        players.add(new Player("Diana"   , dugout));  //4
-//        players.add(new Player("Eugene"  , dugout));  //5
-//        players.add(new Player("Freddy"  , dugout));  //6
-//        players.add(new Player("Garrett" , dugout));  //7
-//        players.add(new Player("Henry"   , dugout));  //8
-//        players.add(new Player("Isabel"  , dugout));  //9
+      }
+      // Closes the file
+      scan.close();  
+
+    } catch (Exception e) {
+      System.out.println("Problem reading input file");
     }
 
-    public Player getNextPlayer(){             //gets next player in arraylist
-        int next = nextPlayerIndex;            //this stores the value of numberPlayerIndex once it enters
-        nextPlayerIndex+=1;                    //this changes the value of index, so changes the player
-        if(nextPlayerIndex >= players.size()){ //if the new index is less than or equal to the total size of the team
-            nextPlayerIndex = 0;               //set the value of index back to 0;
-        }
-        return players.get(next);
+    // Get Dug-out will enter the Field array-list and return the
+    // "dugout" string and Base dug-out will be equal to that string
+    Base dugout = theField.getDugout();
+    /*        players.add(new Player("Alex"    , dugout)); // Player 1
+     *        players.add(new Player("Betty"   , dugout)); // remember, players need to have a name and a location
+     *        players.add(new Player("Carlos"  , dugout)); // 3
+     *        players.add(new Player("Diana"   , dugout)); // 4
+     *        players.add(new Player("Eugene"  , dugout)); // 5
+     *        players.add(new Player("Freddy"  , dugout)); // 6
+     *        players.add(new Player("Garrett" , dugout)); // 7
+     *        players.add(new Player("Henry"   , dugout)); // 8
+     *        players.add(new Player("Isabel"  , dugout)); // 9
+     */
+  }
+
+  // Gets next player in array-list
+  public Player getNextPlayer(){
+    // This stores the value of numberPlayerIndex once it enters
+    int next = nextPlayerIndex;
+    // This changes the value of index, so changes the player
+    nextPlayerIndex+=1;
+
+    // If the new index is less than or equal to the total size of the team
+    if(nextPlayerIndex >= players.size()){
+      // Set the value of index back to 0;
+      nextPlayerIndex = 0;
     }
+    return players.get(next);
+  }
 
-    public String play(int numberOfInnings) throws Exception {
-        String str = "";
-        int inning = 1;
-        while(inning <= numberOfInnings) {
+  public String play(int numberOfInnings) throws Exception {
+    String str = "";
+    int inning = 1;
+    while(inning <= numberOfInnings) {
 
-            str += "Inning " + inning + "\n";             //System.out.printf("\nInning %d\n", inning);
-            while (outs < 3) {
-                str += "\nScore: " + score +"\n";         //System.out.println("\nSCORE: " + score);
-                str += displayField();
-                Player batter = getNextPlayer();
-                str += batter.getName() + " is batting\n";//System.out.println(tempo.getName() + " is batting");
-                batter.setLocation(theField.getBatterBox());
-                int playerTurn = batter.takeTurn();       //this solidifies the players turn to be stored into a int value
-                str += batter.getOutput();
-                if (playerTurn == 0) {                    //if player gets 3 strikes it adds an out
-                    outs++;
-                    batter.setLocation(theField.getDugout());
-                }else {
-                    str += movePlayers(playerTurn);       //otherwise move the player x amount of bases forward.
-                }
-                if(outs >= 3){            //if there's 3 outs it resets the one players output to ""
-                    batter.resetOutput();
-                }
-                if(batter.getStrikes() == 3){
-                    batter.resetOutput();
-                }
-                if(batter.getBalls() == 4){ //I put this at the end of the while statement so if the player recieves
-                    batter.resetOutput();  //4 balls it will still move and then later reset the output
-                }
-            }
-            outs = 0;
-            getNextPlayer().resetOutput();
-            for (int i = 0; i < players.size(); i++) {
-                Player resetPlayer = players.get(i);
-                resetPlayer.setLocation(theField.getDugout());
-            }
-            str += "\nTHREE OUTS!\n";                                             //System.out.println("\nTHREE OUTS!");
-            str += "INNING " + inning + " OVER WITH A SCORE OF " + score + "\n\n";//System.out.println("INNING " + inning + " OVER WITH A SCORE OF " + score);
-            inning++;
-            nextPlayerIndex = 0;
+      // System.out.printf("\nInning %d\n", inning);
+      str += "Inning " + inning + "\n"; 
+      while (outs < 3) {
+        // System.out.println("\nSCORE: " + score);
+        str += "\nScore: " + score +"\n";
+        str += displayField();
+        Player batter = getNextPlayer();
+
+        // System.out.println(tempo.getName() + " is batting");
+        str += batter.getName() + " is batting\n";
+        batter.setLocation(theField.getBatterBox());
+
+        // This solidifies the players turn to be stored into a integer value
+        int playerTurn = batter.takeTurn();
+        str += batter.getOutput();
+
+        // If player gets 3 strikes it adds an out
+        if (playerTurn == 0) {
+          outs++;
+          batter.setLocation(theField.getDugout());
+        }else {
+          // Otherwise move the player x amount of bases forward.
+          str += movePlayers(playerTurn);
         }
-        printStats();
-        score = 0;
-        return str;
+
+        // If there's 3 outs it resets the one players output to ""
+        if(outs >= 3){
+          batter.resetOutput();
+        }
+        if(batter.getStrikes() == 3){
+          batter.resetOutput();
+        }
+
+        // I put this at the end of the while statement so if the player receives
+        if(batter.getBalls() == 4){
+          // 4 balls it will still move and then later reset the output
+          batter.resetOutput(); 
+        }
+      }
+      outs = 0;
+      getNextPlayer().resetOutput();
+      for (int i = 0;i < players.size();i++) {
+        Player resetPlayer = players.get(i);
+        resetPlayer.setLocation(theField.getDugout());
+      }
+      // System.out.println("\nTHREE OUTS!");
+      str += "\nTHREE OUTS!\n";
+
+      // System.out.println("INNING " + inning + " OVER WITH A SCORE OF " + score);
+      str += "INNING " + inning + " OVER WITH A SCORE OF " + score + "\n\n";
+      inning++;
+      nextPlayerIndex = 0;
     }
-
-    public String movePlayers(int forward){
-        String str = "";
-        for(int i = 0; i < players.size(); i++){             //goes through each player
-            Player playerZ = players.get(i);                 //gets the name of the player and location and stores it as a player
-            if(playerZ.isNotInDugout() == true){             //if the player is not in the dugout return true
-                Base newLocation = theField.moveAhead(playerZ.getLocation(), forward); //move ahead is called by theField object
-                //remember moveAhead requires a starting point as a parameter as well as an int value to tell it to move x amount of bases forward
-                playerZ.setLocation(newLocation);            //sets the players location to the result of Base newLocation
-                playerZ.resetOutput();
-                if(newLocation.isHome() == true){             //if the string value equals home then isHome is true
-                    score+=1;//adds to the score
-                    str += playerZ + "  SCORED!\n";           //System.out.println(playerZ + " SCORED!!");
-                    playerZ.setLocation(theField.getDugout());//after the player scores he or she is sent back to the dugout
-                }
-            }
-        }
+    printStats();
+    score = 0;
     return str;
-    }
+  }
 
-    public String displayField(){                        //displays contents of each base
-        String[] theBases = {"empty", "empty", "empty"}; //there are 3 bases so the arraylist is from 0 to 2
-        String str = "";
+  public String movePlayers(int forward){
+    String str = "";
+    // Goes through each player
+    for(int i = 0;i < players.size();i++){
+      // Gets the name of the player and location and stores it as a player
+      Player playerZ = players.get(i);
 
-        for(int i = 0; i < players.size();i++){
-            Player thePlayer = players.get(i);           //remember to call a player you need a name and a location
-            //so here you set thePlayer equal to the String name it's currently on
-            Base whichBase = thePlayer.getLocation();    //this assigns the player a String depending on the location on field
+      // If the player is not in the dug-out return true
+      if(playerZ.isNotInDugout() == true){
+        // Move ahead is called by theField object
 
-            if(whichBase.getName().equals("First")){
-                theBases[0] = thePlayer.getName();
-            }
-            if(whichBase.getName().equals("Second")){
-                theBases[1] = thePlayer.getName();
-            }
-            if(whichBase.getName().equals("Third")){
-                theBases[2] = thePlayer.getName();
-            }
+        // Remember moveAhead requires a starting point as a parameter as well
+        // as an integer value to tell it to move x amount of bases forward
+        Base newLocation = theField.moveAhead(playerZ.getLocation(), forward);
+
+        // Sets the players location to the result of Base newLocation
+        playerZ.setLocation(newLocation);
+
+        // If the string value equals home then isHome is true
+        playerZ.resetOutput();
+        if(newLocation.isHome() == true){
+          // Adds to the score
+          score+=1;
+          // System.out.println(playerZ + " SCORED!!");
+          str += playerZ + "  SCORED!\n"; 
+
+          // After the player scores he or she is sent back to the dug-out
+          playerZ.setLocation(theField.getDugout());
         }
-        str += "\n[ 1 ] " + theBases[0] + " [ 2 ] " + theBases[1] + " [ 3 ] " + theBases[2] + "\n\n";//System.out.printf("\n[ 1 ] %s [ 2 ] %s [ 3 ] %s\n\n ",theBases[0], theBases[1], theBases[2]);//print bases with players
-        return str;
+      }
+    }
+    return str;
+  }
+
+  // Displays contents of each base
+  public String displayField(){           
+    // There are 3 bases so the array-list is from 0 to 2
+    String[] theBases = {"empty", "empty", "empty"};
+    String str = "";
+
+    for(int i = 0;i < players.size();i++){
+      // Remember to call a player you need a name and a location
+      // so here you set thePlayer equal to the String name it's currently on
+      Player thePlayer = players.get(i);
+
+      // This assigns the player a String depending on the location on field
+      Base whichBase = thePlayer.getLocation();
+
+      if(whichBase.getName().equals("First")){
+        theBases[0] = thePlayer.getName();
+      }
+      if(whichBase.getName().equals("Second")){
+        theBases[1] = thePlayer.getName();
+      }
+      if(whichBase.getName().equals("Third")){
+        theBases[2] = thePlayer.getName();
+      }
     }
 
-    public void printStats() throws Exception{
-        PrintWriter pw = new PrintWriter("Stats.txt"); //creates a file
-        pw.println("GAME STATS:");                             //writes in the empty file
-        pw.println("**************************************");
-        pw.println("PLAYER          HITS  AT-BATS  AVERAGE");
+    // System.out.printf("\n[ 1 ] %s [ 2 ] %s [ 3 ] %s\n\n ",theBases[0], theBases[1], theBases[2]);//print bases with players
+    str += "\n[ 1 ] " + theBases[0] + " [ 2 ] " + theBases[1] + " [ 3 ] " + theBases[2] + "\n\n";
+    return str;
+  }
 
-        for(int i = 0; i < players.size(); i++) {              //run's through the players
-            Player tempo = players.get(i);                     //creates a temp player
-            double avg = tempo.getBattingAverage();            //gets the average
-            int hitz = tempo.getHits();                        //gets the hits
-            int atbats = tempo.getAtBats();
+  public void printStats() throws Exception{
+    // Creates a file
+    PrintWriter pw = new PrintWriter("Stats.txt");
 
-            pw.printf("%s\t%d\t%d\t%.3f", tempo, hitz, atbats, avg); //prints the values
-            pw.println();
-        }
-        pw.println("**************************************");
-        pw.close();
+    // Writes in the empty file
+    pw.println("GAME STATS:");
+    pw.println("**************************************");
+    pw.println("PLAYER          HITS  AT-BATS  AVERAGE");
+
+    // Run's through the players
+    for(int i = 0;i < players.size();i++) {
+      // Creates a temporary player
+      Player tempo = players.get(i);
+
+      // Gets the average
+      double avg = tempo.getBattingAverage();
+
+      // Gets the hits
+      int hitz = tempo.getHits();
+      int atbats = tempo.getAtBats();
+
+      // Prints the values
+      pw.printf("%s\t%d\t%d\t%.3f", tempo, hitz, atbats, avg);
+      pw.println();
     }
+    pw.println("**************************************");
+    pw.close();
+  }
 
 }

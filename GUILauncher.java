@@ -1,7 +1,12 @@
-/* Luis Garduno
-   ID #: 47780191
-   Lab 8 - Fall 2018
-*/
+/* 
+ * GUILauncher.java
+ * Baseball
+ *
+ * Created by Luis G.
+ * Updated on 01/27/2023
+ *
+ * */
+
 import javax.swing.JFrame;
 
 public class GUILauncher {
@@ -10,7 +15,11 @@ public class GUILauncher {
         theGame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         theGame.pack();
         theGame.setLocationRelativeTo(null);
-        theGame.setSize(650,450); //set the area for the text box
-        theGame.setVisible(true); //makes the jframe visible
+        
+        // Set the area for the text box
+        theGame.setSize(650,450);
+
+        // Makes the jframe visible
+        theGame.setVisible(true);
     }
 }

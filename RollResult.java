@@ -1,29 +1,41 @@
-/* Luis Garduno
-   ID #: 47780191
-   Lab 8 - Fall 2018
-*/
+/* 
+ * RollResult.java
+ * Baseball
+ *
+ * Created by Luis G.
+ * Updated on 01/27/2023
+ *
+ * */
+
 public class RollResult {
     private int[] vals;
     private String output;
 
     public RollResult(int[] nullVals, String nullOutput){
-        vals = nullVals;                        //values of dice are stored into an value array
-        output = nullOutput;                    //the string is the overall batting result
+        // Values of dice are stored into an value array
+        vals = nullVals;
+        
+        // The string is the overall batting result
+        output = nullOutput;
     }
 
-    public void setOutput(String newOutput){    //setter
+    // Setter
+    public void setOutput(String newOutput){
         output = newOutput;
     }
 
-    public String getOutput(){                  //getter
+    // Getter
+    public String getOutput(){
         return output;
     }
 
-    public void setVals(int[] newVals){         //setter
+    // Setter
+    public void setVals(int[] newVals){
         vals = newVals;
     }
 
-    public int[] getVals(){                     //getter
+    // Getter
+    public int[] getVals(){
         return vals;
     }
 }
